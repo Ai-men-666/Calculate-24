@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 )
 
 var (
@@ -10,6 +11,7 @@ var (
 	used = []bool{false, false, false, false}
 	path = []float64{0, 0, 0}
 	num  = []float64{0, 0, 0, 0}
+	arg  = []rune{'+', '-', '*', '/'}
 )
 
 func ParseCard() {
@@ -49,10 +51,24 @@ func dfs() {
 }
 
 func calculate() {
-	//TODO
+	op := []rune{0, 0, 0}
+	for i := 0; i < 4; i++ {
+		op[0] = arg[i]
+		for j := 0; j < 4; j++ {
+			op[1] = arg[j]
+			for k := 0; k < 4; k++ {
+				op[2] = arg[k]
+				s := tryParentheses(path)
+				if s != "" {
+					fmt.Println(s)
+					os.Exit(0)
+				}
+			}
+		}
+	}
 }
 
-func tryParentheses(a float64, b float64, c float64, d float64) string {
+func tryParentheses(path []float64) string {
 	//TODO
 	return ""
 }
