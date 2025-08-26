@@ -33,7 +33,19 @@ func ParseCard() {
 }
 
 func dfs() {
-	//TODO
+	if len(path) == 4 {
+		calculate()
+		return
+	}
+	for i := 0; i < 4; i++ {
+		if !used[i] {
+			used[i] = true
+			path = append(path, num[i])
+			dfs()
+			path = path[:len(path)-1]
+			used[i] = false
+		}
+	}
 }
 
 func calculate() {
