@@ -11,7 +11,7 @@ import (
 var (
 	card = []string{"", "", "", ""}
 	used = []bool{false, false, false, false}
-	path = []float64{0, 0, 0}
+	path = []float64{}
 	num  = []float64{0, 0, 0, 0}
 	arg  = []rune{'+', '-', '*', '/'}
 )
@@ -81,6 +81,7 @@ func operate(a, b float64, oper rune, res *float64) bool {
 		if math.Abs(b) < 1e-5 {
 			return false
 		}
+		*res = a / b
 	}
 	return true
 }
@@ -89,23 +90,23 @@ func tryParentheses(path []float64, op []rune) string {
 	res := ""
 	// ((path[0] op[0] path[1]) op[1] path[2]) op[2] path[3]
 	if operate(path[0], path[1], op[0], &t1) && operate(t1, path[2], op[1], &t2) && operate(t2, path[3], op[2], &t3) && math.Abs(t3-24) < 1e-5 {
-		return fmt.Sprint("((", strconv.Itoa(int(path[0])), op[0], strconv.Itoa(int(path[1])), ")", op[1], strconv.Itoa(int(path[2])), ")", op[2], strconv.Itoa(int(path[3])))
+		return fmt.Sprint("((", strconv.Itoa(int(path[0])), string(op[0]), strconv.Itoa(int(path[1])), ")", string(op[1]), strconv.Itoa(int(path[2])), ")", string(op[2]), strconv.Itoa(int(path[3])))
 	}
 	// (path[0] op[0] (path[1] op[1] path[2])) op[2] path[3]
 	if operate(path[1], path[2], op[1], &t1) && operate(path[0], t1, op[0], &t2) && operate(t2, path[3], op[2], &t3) && math.Abs(t3-24) < 1e-5 {
-		return fmt.Sprint("(", strconv.Itoa(int(path[0])), op[0], "(", strconv.Itoa(int(path[1])), op[1], strconv.Itoa(int(path[2])), "))", op[2], strconv.Itoa(int(path[3])))
+		return fmt.Sprint("(", strconv.Itoa(int(path[0])), string(op[0]), "(", strconv.Itoa(int(path[1])), string(op[1]), strconv.Itoa(int(path[2])), "))", string(op[2]), strconv.Itoa(int(path[3])))
 	}
 	// path[0] op[0] ((path[1] op[1] path[2]) op[2] path[3])
 	if operate(path[1], path[2], op[1], &t1) && operate(t1, path[3], op[2], &t2) && operate(path[0], t2, op[0], &t3) && math.Abs(t3-24) < 1e-5 {
-		return fmt.Sprint(strconv.Itoa(int(path[0])), op[0], "((", strconv.Itoa(int(path[1])), op[1], strconv.Itoa(int(path[2])), ")", op[2], strconv.Itoa(int(path[3])), ")")
+		return fmt.Sprint(strconv.Itoa(int(path[0])), string(op[0]), "((", strconv.Itoa(int(path[1])), string(op[1]), strconv.Itoa(int(path[2])), ")", string(op[2]), strconv.Itoa(int(path[3])), ")")
 	}
 	// path[0] op[0] (path[1] op[1] (path[2] op[2] path[3]))
 	if operate(path[2], path[3], op[2], &t1) && operate(path[1], t1, op[1], &t2) && operate(path[0], t2, op[0], &t3) && math.Abs(t3-24) < 1e-5 {
-		return fmt.Sprint(strconv.Itoa(int(path[0])), op[0], "(", strconv.Itoa(int(path[1])), op[1], "(", strconv.Itoa(int(path[2])), op[2], strconv.Itoa(int(path[3])), "))")
+		return fmt.Sprint(strconv.Itoa(int(path[0])), string(op[0]), "(", strconv.Itoa(int(path[1])), string(op[1]), "(", strconv.Itoa(int(path[2])), string(op[2]), strconv.Itoa(int(path[3])), "))")
 	}
 	// (path[0] op[0] path[1]) op[1] (path[2] op[2] path[3])
 	if operate(path[0], path[1], op[0], &t1) && operate(path[2], path[3], op[2], &t2) && operate(t1, t2, op[1], &t3) && math.Abs(t3-24) < 1e-5 {
-		return fmt.Sprint("(", strconv.Itoa(int(path[0])), op[0], strconv.Itoa(int(path[1])), ")", op[1], "(", strconv.Itoa(int(path[2])), op[2], strconv.Itoa(int(path[3])), ")")
+		return fmt.Sprint("(", strconv.Itoa(int(path[0])), string(op[0]), strconv.Itoa(int(path[1])), ")", string(op[1]), "(", strconv.Itoa(int(path[2])), string(op[2]), strconv.Itoa(int(path[3])), ")")
 	}
 	return res
 }
