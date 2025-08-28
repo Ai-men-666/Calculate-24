@@ -2,18 +2,20 @@ package main
 
 import (
 	"fmt"
+	"html/template"
 	"log"
 	"math"
-	"os"
+	"net/http"
 	"strconv"
 )
 
 var (
-	card = []string{"", "", "", ""}
-	used = []bool{false, false, false, false}
-	path = []float64{}
-	num  = []float64{0, 0, 0, 0}
-	arg  = []rune{'+', '-', '*', '/'}
+	card   = []string{"", "", "", ""}
+	used   = []bool{false, false, false, false}
+	path   = []float64{}
+	num    = []float64{0, 0, 0, 0}
+	arg    = []rune{'+', '-', '*', '/'}
+	result = ""
 )
 
 func ParseCard() {
@@ -60,10 +62,10 @@ func calculate() {
 			op[1] = arg[j]
 			for k := 0; k < 4; k++ {
 				op[2] = arg[k]
-				s := tryParentheses(path, op)
-				if s != "" {
-					fmt.Println(s)
-					os.Exit(0)
+				result = tryParentheses(path, op)
+				if result != "" {
+					fmt.Println(result)
+					return
 				}
 			}
 		}
@@ -111,17 +113,43 @@ func tryParentheses(path []float64, op []rune) string {
 	return res
 }
 
-func main() {
-	for i := 0; i < 4; i++ {
-		_, err := fmt.Scan(&card[i])
+func indexHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "GET" {
+		http.ServeFile(w, r, "./static/main.html")
+	} else if r.Method == "POST" {
+		result = ""
+		path = []float64{}
+		used = []bool{false, false, false, false}
+
+		r.ParseForm()
+		card[0] = r.Form.Get("card1")
+		card[1] = r.Form.Get("card2")
+		card[2] = r.Form.Get("card3")
+		card[3] = r.Form.Get("card4")
+		log.Println("Input cards:", card)
+		ParseCard()
+		log.Println("Parsed numbers:", num)
+		dfs()
+		log.Println("No Answer")
+		tmpl, err := template.ParseFiles("./static/res.html")
 		if err != nil {
-			log.Fatalln("Failed to read input:", err)
+			log.Fatalln(err)
+		}
+		dataToShow := "No Answer"
+		if result != "" {
+			dataToShow = result
+		}
+		err = tmpl.Execute(w, dataToShow)
+		if err != nil {
+			log.Fatalln(err)
 		}
 	}
-	log.Println("Input cards:", card)
-	ParseCard()
-	log.Println("Parsed numbers:", num)
-	dfs()
-	log.Println("No Answer")
+}
+func main() {
+	http.HandleFunc("/", indexHandler)
+	err := http.ListenAndServe(":8080", nil)
+	if err != nil {
+		log.Fatalln("Failed to start server:", err)
+	}
 	return
 }
