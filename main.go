@@ -118,6 +118,10 @@ func tryParentheses(path []float64, op []rune) string {
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
+		if r.URL.Path != "/" {
+			http.ServeFile(w, r, "./static/main.css")
+			return
+		}
 		http.ServeFile(w, r, "./static/main.html")
 	} else if r.Method == "POST" {
 		result = ""
