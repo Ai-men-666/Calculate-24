@@ -130,7 +130,6 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		ParseCard()
 		log.Println("Parsed numbers:", num)
 		dfs()
-		log.Println("No Answer")
 		tmpl, err := template.ParseFiles("./static/res.html")
 		if err != nil {
 			log.Fatalln(err)
