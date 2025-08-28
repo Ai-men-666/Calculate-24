@@ -11,10 +11,14 @@
     <link href="main.css" rel="stylesheet">  
 <script type="text/javascript" src="https://me.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=hsufxg2wKMOuYocPbu4mCLc8bNCwRNR4G3lXXjFClSLKkTP-9wTyqtvu7DJq6gmYjWFuDqY3puKVWaVp1QlMquCNyV5jgN1Zc4To82P0Q6ZmL-OBJhh4WJp9DwqhSL65BM7UyfZ3TZwUTQJN4QQOEw" charset="UTF-8"></script></head>
 <body class="text-center">
-    <div class="form-signin">
-        <h1 class="h3 mb-3 font-weight-normal">Result</h1>
-        <p>Your Result is:{{.}}</p>>
-        <p class="mt-5 mb-3 text-muted">&copy;By Aimen</p>
+<div class="form-signin">
+    <h1 class="h3 mb-3 font-weight-normal">Calculation Result</h1>
+    <div class="result-text mb-3">
+        {{.}}
     </div>
+    <br>
+    <button class="btn btn-lg btn-primary btn-block mb-2" type="button" onclick="history.back()">Back</button>
+    <p class="mt-5 mb-3 text-muted">&copy;By Aimen</p>
+</div>
 </body>
 </html>
