@@ -39,6 +39,9 @@ func ParseCard() {
 }
 
 func dfs() {
+	if result != "" {
+		return
+	}
 	if len(path) == 4 {
 		calculate()
 		return
